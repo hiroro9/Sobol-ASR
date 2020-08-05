@@ -14,7 +14,7 @@ import matplotlib.pyplot as plt
 # In[3]:
 
 
-nn = np.matrix([[1],[0],[0]]) 
+nn = np.matrix([[1],[1],[0]]) 
 dirc = str(nn[0,0]) + str(nn[1,0])+str(nn[2,0])
 
 
@@ -140,4 +140,4 @@ Sobol = pd.DataFrame(index=[], columns=columns)
 for t in range(1, 500, 10):
     Si_p = pd.DataFrame(data = S(t), columns = columns)
     Sobol = Sobol.append(Si_p)
-Sobol.to_csv("Sobol"+dirc + "_K_G.csv", index=False)
+Sobol.to_csv("output/" + "Sobol"+dirc + "_K_G.csv", index=False)
