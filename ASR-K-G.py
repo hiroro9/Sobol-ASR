@@ -1,51 +1,17 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[1]:
-
-
 from SALib.sample import saltelli
 from SALib.analyze import sobol
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
 
 
-# In[3]:
+#============ change cosine vector =================#
+nn = np.matrix([[1],[0],[1]]) 
+#===================================================#
 
-
-nn = np.matrix([[1],[1],[0]]) 
 dirc = str(nn[0,0]) + str(nn[1,0])+str(nn[2,0])
-
-
-# In[2]:
-
-
-#=========== general settings ============================#
-plt.rcParams["figure.figsize"] = [20, 10]
-plt.rcParams["figure.subplot.wspace"] = 0.4
-
-plt.rcParams['font.family'] ='sans-serif'#使用するフォント
-plt.rcParams['font.sans-serif'] ='Arial'#使用するフォント
-plt.rcParams["font.size"] = 30
-#plt.rcParams['mathtext.rm'] ='sans'#使用するフォント
-#plt.rcParams['mathtext.default'] ='rm'#使用するフォント
-
-plt.rcParams['xtick.direction'] = 'in'#x軸の目盛線が内向き('in')か外向き('out')か双方向か('inout')
-plt.rcParams['ytick.direction'] = 'in'#y軸の目盛線が内向き('in')か外向き('out')か双方向か('inout')
-plt.rcParams['xtick.major.width'] = 1.0#x軸主目盛り線の線幅
-plt.rcParams['ytick.major.width'] = 1.0#y軸主目盛り線の線幅
-plt.rcParams["xtick.major.pad"] = 19.0
-plt.rcParams["ytick.major.pad"] = 16.0
-plt.rcParams["xtick.major.size"] = 10
-plt.rcParams["ytick.major.size"] = 10
-
-plt.rcParams['axes.linewidth'] = 1.0# 軸の線幅edge linewidth。囲みの太さ
-plt.rcParams["axes.labelpad"] = 10
-#==================================================================#
-
-
-# In[4]:
 
 
 def ASR(t, s11, s22, s33, s12, s13, s23, p0, ts, tv):
@@ -72,9 +38,6 @@ def ASR(t, s11, s22, s33, s12, s13, s23, p0, ts, tv):
     return e*10**6
 
 
-# In[5]:
-
-
 problem = {
     'num_vars': 9,
     'names': [ 's11', 's22', 's33', 's12', 's13', 's23', 'p0', 'ts', 'tv'],
@@ -91,13 +54,8 @@ problem = {
 }
 
 
-# In[6]:
-
 
 param_values = saltelli.sample(problem, 500)
-
-
-# In[43]:
 
 
 def S(t):
@@ -117,9 +75,6 @@ def S(t):
         out = np.hstack([out, inn])
         
     return out
-
-
-# In[44]:
 
 
 columns = ["time[h]",
