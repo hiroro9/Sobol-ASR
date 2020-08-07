@@ -6,10 +6,12 @@ from SALib.analyze import sobol
 import numpy as np
 import pandas as pd
 
+#====== input parameter ====================#
+nn = np.matrix([[1],[0],[1]])  #cosine vector
+sampling = 2000  # sampling number for saltelli sampling
+time = 100  # time for ASR measurement
+#================================================#
 
-#============ change cosine vector =================#
-nn = np.matrix([[0],[0],[1]]) 
-#===================================================#
 
 dirc = str(nn[0,0]) + str(nn[1,0])+str(nn[2,0])
 
@@ -55,7 +57,7 @@ problem = {
 
 
 
-param_values = saltelli.sample(problem, 2000)
+param_values = saltelli.sample(problem, sampling)
 
 
 def S(t):
@@ -92,7 +94,7 @@ columns = ["time[h]",
 Sobol = pd.DataFrame(index=[], columns=columns)
 
 
-for t in range(1, 100, 5):
+for t in range(1, time, 5):
     Si_p = pd.DataFrame(data = S(t), columns = columns)
     Sobol = Sobol.append(Si_p)
 Sobol.to_csv("output/" + "Sobol"+dirc + "_K_G.csv", index=False)

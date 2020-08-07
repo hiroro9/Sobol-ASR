@@ -1,16 +1,15 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[1]:
-
-
 from SALib.sample import saltelli
 from SALib.analyze import sobol
 import numpy as np
 import pandas as pd
 
-#====== change cosine vector ====================#
-nn = np.matrix([[1],[0],[1]]) 
+#====== input parameter ====================#
+nn = np.matrix([[1],[0],[1]])  #cosine vector
+sampling = 2000  # sampling number for saltelli sampling
+time = 100  # time for ASR measurement
 #================================================#
 
 
@@ -58,10 +57,8 @@ problem = {
 
 
 
-param_values = saltelli.sample(problem, 2000)
+param_values = saltelli.sample(problem, sampling)
 
-
-# In[9]:
 
 
 def S(t):
@@ -102,7 +99,7 @@ columns = ["time[h]",
 Sobol = pd.DataFrame(index=[], columns=columns)
 
 
-for t in range(1, 100, 5):
+for t in range(1, time, 5):
     Si_p = pd.DataFrame(data = S(t), columns = columns)
     Sobol = Sobol.append(Si_p)
 Sobol.to_csv("output/Sobol"+dirc + ".csv", index=False)
