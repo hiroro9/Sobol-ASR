@@ -8,7 +8,7 @@ import pandas as pd
 
 
 #============ change cosine vector =================#
-nn = np.matrix([[1],[0],[1]]) 
+nn = np.matrix([[0],[0],[1]]) 
 #===================================================#
 
 dirc = str(nn[0,0]) + str(nn[1,0])+str(nn[2,0])
@@ -55,7 +55,7 @@ problem = {
 
 
 
-param_values = saltelli.sample(problem, 500)
+param_values = saltelli.sample(problem, 2000)
 
 
 def S(t):
@@ -92,7 +92,7 @@ columns = ["time[h]",
 Sobol = pd.DataFrame(index=[], columns=columns)
 
 
-for t in range(1, 500, 10):
+for t in range(1, 100, 5):
     Si_p = pd.DataFrame(data = S(t), columns = columns)
     Sobol = Sobol.append(Si_p)
 Sobol.to_csv("output/" + "Sobol"+dirc + "_K_G.csv", index=False)
