@@ -6,14 +6,19 @@ from SALib.analyze import sobol
 import numpy as np
 import pandas as pd
 
+n1 = int(input("please input n1: "))
+n2 = int(input("please input n2: "))
+n3 = int(input("please input n3: "))
+
 #====== input parameter ====================#
-nn = np.matrix([[1],[0],[1]])  #cosine vector
-sampling = 2000  # sampling number for saltelli sampling
+nn = np.matrix([[n1],[n2],[n3]])  #cosine vector
+sampling = 5000  # sampling number for saltelli sampling
 time = 100  # time for ASR measurement
 #================================================#
 
 
 dirc = str(nn[0,0]) + str(nn[1,0])+str(nn[2,0])
+print(dirc)
 
 
 def ASR(t, s11, s22, s33, s12, s13, s23, p0, ts, tv):
@@ -43,15 +48,15 @@ def ASR(t, s11, s22, s33, s12, s13, s23, p0, ts, tv):
 problem = {
     'num_vars': 9,
     'names': [ 's11', 's22', 's33', 's12', 's13', 's23', 'p0', 'ts', 'tv'],
-    'bounds': [[0, 100],
-               [0, 100],
-               [0, 100],
-               [0, 100],
-               [0, 100],
-               [0, 100],
-               [0, 100],
-               [0, 50],
-               [0, 50],
+    'bounds': [[0, 100]*9,
+#              [0, 100],
+#              [35, 45],
+#              [0, 100],
+#              [0, 100],
+#              [0, 100],
+#              [2, 12],
+#              [0, 100],
+#              [0, 100],
                ]
 }
 
@@ -69,14 +74,22 @@ def S(t):
     Si = sobol.analyze(problem, Y, print_to_console=False)
     
     out = np.array([[t]])
+    outT = np.array([[t]])
     
     for i in range(0, 9):
         inn = np.array([
             [Si["S1"][i], Si["S1_conf"][i]]
         ])
         out = np.hstack([out, inn])
+
+    for iT in range(0, 9):
+        innT = np.array([
+            [Si["ST"][iT], Si["ST_conf"][iT]]
+        ])
+        outT = np.hstack([outT, innT])
         
-    return out
+        
+    return out, outT
 
 
 columns = ["time[h]",
@@ -91,10 +104,17 @@ columns = ["time[h]",
            "tv","tv_err"
           ]
 
-Sobol = pd.DataFrame(index=[], columns=columns)
-
+Sobol_Si = pd.DataFrame(index=[], columns=columns)
+Sobol_ST = pd.DataFrame(index=[], columns=columns)
 
 for t in range(1, time, 5):
-    Si_p = pd.DataFrame(data = S(t), columns = columns)
-    Sobol = Sobol.append(Si_p)
-Sobol.to_csv("output/" + "Sobol"+dirc + "_K_G.csv", index=False)
+    SI = S(t)
+
+    Si_p = pd.DataFrame(data = SI[0], columns = columns)
+    Sobol_Si = Sobol_Si.append(Si_p)
+
+    ST_p = pd.DataFrame(data = SI[1], columns = columns)
+    Sobol_ST = Sobol_ST.append(ST_p)
+
+Sobol_Si.to_csv("output/" + "Si_K_G_svpp" + dirc + ".csv", index=False)
+Sobol_ST.to_csv("output/" + "ST_K_G_svpp" + dirc + ".csv", index=False)
