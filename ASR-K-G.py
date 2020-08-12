@@ -116,5 +116,5 @@ for t in range(1, time, 5):
     ST_p = pd.DataFrame(data = SI[1], columns = columns)
     Sobol_ST = Sobol_ST.append(ST_p)
 
-Sobol_Si.to_csv("output/" + "Si_K_G_svpp" + dirc + ".csv", index=False)
-Sobol_ST.to_csv("output/" + "ST_K_G_svpp" + dirc + ".csv", index=False)
+Sobol_Si.to_csv("output/" + "Si_K_G_" + dirc + ".csv", index=False)
+Sobol_ST.to_csv("output/" + "ST_K_G_" + dirc + ".csv", index=False)
